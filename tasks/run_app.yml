@@ -1,0 +1,27 @@
+---
+
+- name: Check app status
+  shell: 'pm2 status | grep {{ app }} | grep -o online'
+  environment: 
+    HOME: "{{ app_root }}/{{ app }}/" 
+  changed_when: false
+  failed_when: false
+  register: app_status
+  
+- name: Run app
+  command: 'pm2 start "{{ app_root }}/{{ app }}/{{ nodejs_index }}" --name={{ app }} --watch -l {{ nodejs_log.dir }}/{{ app }}.log'
+  environment: 
+    HOME: "{{ app_root }}/{{ app }}/"
+  when: app_status.stdout != 'online'
+
+- name: App is enabled (1/2)
+  command: "pm2 startup notifier"
+  environment: 
+    HOME: "{{ app_root }}/{{ app }}/"
+  when: app_status.stdout != 'online'
+
+- name: App is enabled (2/2)
+  command: "pm2 save"
+  environment: 
+    HOME: "{{ app_root }}/{{ app }}/"
+  when: app_status.stdout != 'online'
