@@ -1,0 +1,14 @@
+{{ app_root }}/{{ app }}/.pm2/logs/*.log
+{{ app_root }}/{{ app }}/err.log
+/var/log/nodejs/*.log
+{
+	daily
+	rotate 7
+	missingok
+	compress
+	delaycompress
+	notifempty
+	sharedscripts
+	copytruncate
+	dateext
+}

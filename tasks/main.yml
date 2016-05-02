@@ -9,3 +9,10 @@
   when: nodejs_enabled and nodejs_index is defined
   tags: 
     - "nodejs"
+
+- include: logrotate.yml
+  when: nodejs_enabled and nodejs_index is defined
+  tags: 
+    - "nodejs"
+    - "logs"
+    - "logrotate"
